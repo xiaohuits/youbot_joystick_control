@@ -12,12 +12,6 @@ using namespace std;
 class SubscriberAndPublish
 {
 public:
-	/*void SubscribeAndPublish()
-	{
-		twist_pub = n.advertise<geometry_msgs::Twist>("cmd_vel",1);
-		sub_to_test = n.subscribe<sensor_msgs::Joy>("joy", 1, &SubscriberAndPublish::movement, this);
-	}
-	*/
 	void movement(const sensor_msgs::Joy::ConstPtr& joy)
 	{
 		geometry_msgs::Twist msg;
@@ -27,7 +21,7 @@ public:
 //		ROS_INFO(joy->axes);
 		msg = twistSet(0, lstickv, lstickh);	
 //		arm_position[0] = arm_step_size*joy->axes[4];
-		cout << msg << endl;
+		//cout << msg << endl;
 		twist_pub.publish(msg);
 	}
 
