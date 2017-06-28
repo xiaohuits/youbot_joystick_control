@@ -1,0 +1,25 @@
+<launch>
+    <node pkg="joy" type="joy_node" name="joy_state_pub">
+        <!-- Parameters used to find the camera -->
+        <param name="coalesce_interval" value="0.2"/>
+        <param name="deadzone" value="0.2"/>
+        <param name="autorepeat_rate" value="5"/>
+    </node>
+    <node pkg="joystick_control" type="youbot_control" name="youbot_control"/>
+    <node pkg="youbot_kinematics" type="youbot_target_publisher" name="youbot_target_publisher"/>
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find youbot_description)/urdf/youbot_arm/view_arm.urdf.xacro'"/>
+    <param name="robot_description_sim" command="$(find xacro)/xacro.py '$(find youbot_description)/urdf/youbot_arm/view_arm1.urdf.xacro'"/>
+    <param name="use_tf_static" value="false"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="robot_state_publisher_sim" pkg="robot_state_publisher" type="robot_state_publisher">
+        <remap from="joint_states" to="joint_states_target"/>
+        <remap from="robot_description" to="robot_description_sim"/>
+        <remap from="tf" to="tf_sim"/>
+    </node>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find youbot_description)/rviz/rviz_real.rviz" required="true"/>
+    <node name="rviz_sim" pkg="rviz" type="rviz" args="-d $(find youbot_description)/rviz/rviz_sim.rviz" required="true">
+        <remap from="tf" to="tf_sim"/>
+        <remap from="robot_description" to="robot_description_sim"/>
+    </node>
+
+</launch>
